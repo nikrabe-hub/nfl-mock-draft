@@ -1,0 +1,75 @@
+import type { MessageKey } from './de';
+
+export const en: Record<MessageKey, string> = {
+  'app.title': 'NFL Mock Draft Simulator 2027',
+  'app.short': 'Mock Draft',
+  'nav.start': 'Start',
+  'nav.settings': 'Settings',
+  'nav.main': 'Main navigation',
+
+  'home.subtitle': 'Your mock draft for the 2027 NFL Draft – on PC and phone, even without internet.',
+  'home.wip.title': 'Foundation is in place',
+  'home.wip.body': 'Teams, logos, storage, backup and offline mode are built in. Players, the draft board and AI picks follow in the next phases.',
+  'home.teams': '32 teams',
+  'home.teams.hint': 'If a logo is missing in public/logos/, a badge in the team colour is shown.',
+
+  'status.offlineReady': 'Offline ready',
+  'status.offlinePending': 'Preparing offline mode …',
+  'status.storage': 'Storage',
+  'status.storage.indexeddb': 'IndexedDB',
+  'status.storage.localstorage': 'localStorage (fallback)',
+  'status.storage.memory': 'memory only – lost when you close the app',
+
+  'pwa.update': 'A new version is available.',
+  'pwa.update.button': 'Update now',
+
+  'header.theme': 'Change appearance',
+  'header.lang': 'Change language',
+
+  'settings.title': 'Settings',
+  'settings.appearance': 'Appearance',
+  'settings.theme': 'Theme',
+  'settings.theme.system': 'System',
+  'settings.theme.light': 'Light',
+  'settings.theme.dark': 'Dark',
+  'settings.language': 'Language',
+
+  'settings.data.title': 'Data status',
+  'settings.data.none': 'No player data loaded yet. It arrives in phase 3.',
+
+  'settings.storage.title': 'Storage',
+  'settings.storage.persistent': 'Stored permanently',
+  'settings.storage.persistent.yes': 'Yes – the browser will not delete your data on its own.',
+  'settings.storage.persistent.no': 'Not guaranteed – export a backup regularly.',
+  'settings.storage.persistent.unknown': 'Unknown',
+
+  'settings.backup.title': 'Backup',
+  'settings.backup.hint': 'Save all your own data (mocks, watchlist, settings) as a file – e.g. to move it from PC to phone.',
+  'settings.backup.export': 'Export backup',
+  'settings.backup.exported': 'Backup saved: {name}',
+  'settings.backup.import': 'Import backup',
+  'settings.backup.preview': 'Backup from {date} with {count} entries. Restoring overwrites entries with the same name.',
+  'settings.backup.preview.nodate': 'an unknown date',
+  'settings.backup.restore': 'Restore',
+  'settings.backup.cancel': 'Cancel',
+  'settings.backup.restored': 'Done: {count} entries restored.',
+  'settings.backup.failed': 'Restoring failed. Your existing data was not changed.',
+  'backup.error.not_json': 'The file is not valid JSON. Nothing was changed.',
+  'backup.error.wrong_format': 'This is not a backup file of this app. Nothing was changed.',
+  'backup.error.newer_version': 'The backup comes from a newer app version. Please update the app. Nothing was changed.',
+  'backup.error.bad_data': 'The backup file is damaged. Nothing was changed.',
+  'backup.error.bad_key': 'The backup file contains an invalid entry ({detail}). Nothing was changed.',
+  'backup.error.too_large': 'The file is too large for a backup. Nothing was changed.',
+  'backup.error.read': 'The file could not be read. Nothing was changed.',
+
+  'settings.install.title': 'Install as app',
+  'settings.install.button': 'Install app',
+  'settings.install.installed': 'The app is already running as an installed app.',
+  'settings.install.ios': 'iPhone/iPad: In Safari tap “Share”, then “Add to Home Screen”.',
+  'settings.install.android': 'Android: Open the browser menu (⋮) and choose “Install app” or “Add to Home screen”.',
+
+  'settings.about.title': 'About',
+  'settings.about.version': 'Version',
+  'settings.about.sources': 'Data sources',
+  'settings.about.sources.none': 'Will follow with the data in phase 3.',
+};
