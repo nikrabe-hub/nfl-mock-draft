@@ -1,0 +1,22 @@
+{
+  "tankathon-order": {
+    "pages": {
+      "https://www.tankathon.com/nfl/full-draft": {
+        "fetchedOn": "2026-10-19"
+      }
+    },
+    "lastRun": "2026-10-19",
+    "lastManual": "2026-10-19",
+    "lastSuccess": "2026-10-19"
+  },
+  "tankathon-board": {
+    "pages": {
+      "https://www.tankathon.com/nfl/big-board": {
+        "fetchedOn": "2026-10-19"
+      }
+    },
+    "lastRun": "2026-10-19",
+    "lastManual": "2026-10-19",
+    "lastSuccess": "2026-10-19"
+  }
+}
