@@ -1,18 +1,23 @@
-import { TEAMS } from '../data/teams';
-import { useT } from '../i18n';
+import { useState } from 'preact/hooks';
 import { dataStore } from '../data/loader';
+import { discardDraft, draftStore } from '../draft/controller';
+import { getTeam } from '../data/teams';
+import { useT } from '../i18n';
 import { pwaState } from '../pwa';
 import { storageInfo } from '../storage/db';
 import { useStore } from '../store';
-import { TeamLogo } from './TeamLogo';
+import { Setup } from './Setup';
 
-const SORTED = [...TEAMS].sort((a, b) => a.city.localeCompare(b.city) || a.name.localeCompare(b.name));
-
-export function Home() {
+export function Home({ onOpenDraft }: { onOpenDraft: () => void }) {
   const t = useT();
   const pwa = useStore(pwaState);
   const storage = useStore(storageInfo);
   const data = useStore(dataStore);
+  const draft = useStore(draftStore);
+  const [confirm, setConfirm] = useState(false);
+  const s = draft.session;
+
+  const teams = s ? s.config.userTeams.map((a) => getTeam(a)?.name ?? a).join(', ') : '';
 
   return (
     <section aria-labelledby="home-title">
@@ -28,26 +33,58 @@ export function Home() {
         <span class={`chip ${storage.backend === 'memory' ? 'chip-warn' : ''}`} data-testid="storage-status">
           {t('status.storage')}: {t(`status.storage.${storage.backend}`)}
         </span>
+        <span class="chip" data-testid="home-data">
+          {t('home.data', { players: data.players.filter((p) => !p.notListed).length, picks: data.picks.length })}
+        </span>
       </div>
 
-      <div class="card">
-        <h2>{t('home.wip.title')}</h2>
-        <p data-testid="home-data">{t('home.wip.body', { players: data.players.filter((p) => !p.notListed).length, picks: data.picks.length })}</p>
-      </div>
+      {draft.invalidSaved && (
+        <p class="msg msg-error" role="alert" data-testid="draft-invalid">
+          {t('resume.invalid')}
+        </p>
+      )}
 
-      <h2 class="section-title">{t('home.teams')}</h2>
-      <p class="muted small">{t('home.teams.hint')}</p>
-      <ul class="team-grid" data-testid="team-grid">
-        {SORTED.map((team) => (
-          <li key={team.abbr} class="team-tile" data-testid="team-tile">
-            <TeamLogo abbr={team.abbr} size={40} />
-            <span class="team-text">
-              <span class="team-name">{team.name}</span>
-              <span class="team-city">{team.city}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
+      {s ? (
+        <div class="card" data-testid="resume-card">
+          <h2>{t('resume.title')}</h2>
+          <p data-testid="resume-info">
+            {t(s.status === 'finished' ? 'resume.finished' : 'resume.running', { teams, done: s.results.length, total: s.order.length })}
+          </p>
+          <div class="row">
+            <button type="button" class="btn" data-testid="resume-open" onClick={onOpenDraft}>
+              {t('resume.open')}
+            </button>
+            {!confirm && (
+              <button type="button" class="btn btn-secondary" data-testid="resume-new" onClick={() => setConfirm(true)}>
+                {t('resume.new')}
+              </button>
+            )}
+          </div>
+          {confirm && (
+            <div class="notice" role="alertdialog" aria-label={t('resume.confirm')}>
+              <p>{t('resume.confirm')}</p>
+              <div class="row">
+                <button
+                  type="button"
+                  class="btn"
+                  data-testid="resume-discard"
+                  onClick={() => {
+                    discardDraft();
+                    setConfirm(false);
+                  }}
+                >
+                  {t('resume.confirm.yes')}
+                </button>
+                <button type="button" class="btn btn-secondary" onClick={() => setConfirm(false)}>
+                  {t('resume.confirm.no')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <Setup onStarted={onOpenDraft} />
+      )}
     </section>
   );
 }

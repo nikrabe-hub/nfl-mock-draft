@@ -1,6 +1,8 @@
 /** Alle Schlüssel, unter denen die App Daten speichert (und die ins Backup wandern). */
 export const KEYS = {
   settings: 'settings',
+  /** Zuletzt gewählte Draft-Optionen (Teams, Runden, Tempo, Zufall). */
+  draftPrefs: 'draftPrefs',
   // Ab Phase 4/5 belegt:
   activeDraft: 'activeDraft',
   mocks: 'mocks',

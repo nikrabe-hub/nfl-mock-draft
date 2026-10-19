@@ -1,12 +1,14 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { draftStore } from '../draft/controller';
 import { useT } from '../i18n';
 import { applyUpdate, pwaState } from '../pwa';
 import { settingsStore, updateSettings, type Theme } from '../storage/settings';
 import { useStore } from '../store';
+import { DraftView } from './DraftView';
 import { Home } from './Home';
 import { Settings } from './Settings';
 
-type Tab = 'home' | 'settings';
+type Tab = 'home' | 'draft' | 'settings';
 
 const NEXT_THEME: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
 
@@ -38,7 +40,22 @@ export function App() {
   const t = useT();
   const settings = useStore(settingsStore);
   const pwa = useStore(pwaState);
+  const draft = useStore(draftStore);
   const [tab, setTab] = useState<Tab>('home');
+  const hasDraft = !!draft.session;
+
+  // Nach dem Neuladen mitten im Draft landet man direkt wieder im Draft.
+  const reopened = useRef(false);
+  useEffect(() => {
+    if (!draft.loaded || reopened.current) return;
+    reopened.current = true;
+    if (draft.session && draft.session.status === 'running') setTab('draft');
+  }, [draft.loaded, draft.session]);
+
+  // Gibt es keinen Draft mehr (verworfen), zurück zur Startseite.
+  useEffect(() => {
+    if (tab === 'draft' && !hasDraft) setTab('home');
+  }, [tab, hasDraft]);
 
   return (
     <div class="app">
@@ -75,12 +92,21 @@ export function App() {
         </div>
       )}
 
-      <main class="content">{tab === 'home' ? <Home /> : <Settings />}</main>
+      <main class="content">
+        {tab === 'home' && <Home onOpenDraft={() => setTab('draft')} />}
+        {tab === 'draft' && hasDraft && <DraftView onLeave={() => setTab('home')} />}
+        {tab === 'settings' && <Settings />}
+      </main>
 
       <nav class="tabbar" aria-label={t('nav.main')}>
         <button type="button" class={tab === 'home' ? 'tab active' : 'tab'} aria-current={tab === 'home' ? 'page' : undefined} data-testid="tab-home" onClick={() => setTab('home')}>
           {t('nav.start')}
         </button>
+        {hasDraft && (
+          <button type="button" class={tab === 'draft' ? 'tab active' : 'tab'} aria-current={tab === 'draft' ? 'page' : undefined} data-testid="tab-draft" onClick={() => setTab('draft')}>
+            {t('nav.draft')}
+          </button>
+        )}
         <button type="button" class={tab === 'settings' ? 'tab active' : 'tab'} aria-current={tab === 'settings' ? 'page' : undefined} data-testid="tab-settings" onClick={() => setTab('settings')}>
           {t('nav.settings')}
         </button>

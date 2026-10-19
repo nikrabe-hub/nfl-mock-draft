@@ -5,7 +5,10 @@ import { applyBackup, backupFileName, createBackup, validateBackup, type Backup 
 import { getStorage, readPersistence, storageInfo } from '../storage/db';
 import { LANGS, loadSettings, settingsStore, THEMES, updateSettings } from '../storage/settings';
 import { useStore } from '../store';
+import { resumeDraft } from '../draft/controller';
+import { loadPrefs } from '../draft/prefs';
 import { DataStatus, ImportCard } from './DataSection';
+import { RandomnessControl, TempoControl } from './DraftOptions';
 
 interface Msg {
   kind: 'ok' | 'error';
@@ -72,6 +75,8 @@ export function Settings() {
     try {
       const { written } = await applyBackup(await getStorage(), pending);
       await loadSettings();
+      await loadPrefs();
+      await resumeDraft();
       setMsg({ kind: 'ok', key: 'settings.backup.restored', params: { count: written } });
     } catch {
       setMsg({ kind: 'error', key: 'settings.backup.failed' });
@@ -130,6 +135,21 @@ export function Settings() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>{t('settings.draftprefs')}</h2>
+        <p class="muted small">{t('settings.draftprefs.hint')}</p>
+        <div class="field">
+          <span class="label">{t('setup.random')}</span>
+          <RandomnessControl />
+          <p class="muted small hint">{t('random.hint')}</p>
+        </div>
+        <div class="field">
+          <span class="label">{t('setup.tempo')}</span>
+          <TempoControl />
+        </div>
+        <p class="muted small hint">{t('draft.needs.estimated')}</p>
       </div>
 
       <div class="card">
