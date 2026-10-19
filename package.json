@@ -9,7 +9,8 @@
     "preview": "vite preview --port 4173 --strictPort",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "data:update": "tsx scripts/data-update/run.ts"
   },
   "dependencies": {
     "preact": "^10.29.8"
@@ -20,6 +21,8 @@
     "@types/node": "^22.20.5",
     "fake-indexeddb": "^6.2.6",
     "jsdom": "^26.1.0",
+    "node-html-parser": "^9.0.5",
+    "tsx": "^4.20.0",
     "typescript": "~5.8.3",
     "vite": "^6.4.4",
     "vite-plugin-pwa": "^1.3.0",

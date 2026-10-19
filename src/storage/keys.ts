@@ -7,4 +7,9 @@ export const KEYS = {
   watchlist: 'watchlist',
   needsOverride: 'needsOverride',
   orderOverride: 'orderOverride',
+  /** Eigene Importe (Overlay über dem Big Board). */
+  dataOverlay: 'dataOverlay',
 } as const;
+
+/** Zwischenspeicher (zuletzt geladene Quelldateien). Gehört nicht ins Backup. */
+export const CACHE_PREFIX = 'cache:';

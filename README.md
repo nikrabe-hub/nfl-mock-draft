@@ -45,6 +45,23 @@ Schlägt ein Test fehl (roter Haken), wird **nichts** veröffentlicht. Die alte 
 
 Ist die Datei ungültig, zeigt die App eine verständliche Meldung und ändert nichts.
 
+## Daten: woher sie kommen und wie sie aktuell bleiben
+
+Die App selbst ruft **nie** fremde Webseiten ab. Das erledigt allein der geplante Job `Daten-Update` auf GitHub (Reiter **Actions**):
+
+| Quelle | Datei | Zeitpunkt (deutsche Zeit) |
+|---|---|---|
+| Tankathon „Full Draft“ | `public/data/draft-order.json` | dienstags 08:00 |
+| Tankathon „Big Board“ (inkl. College-Statistiken) | `public/data/big-board.json` und `public/data/college-stats.json` | dienstags 08:20 |
+
+Der Job ist höflich: eine Seite nach der anderen, 15–45 Sekunden Pause, `robots.txt` wird bei jedem Lauf gelesen, ehrlicher User-Agent, bei Fehlern (429, 403, 5xx, Captcha) wird sofort abgebrochen. Vor dem Speichern wird geprüft (32 Teams, alle 7 Runden, keine doppelten Picks bzw. mindestens 200 Spieler, eindeutige Ranks …). Besteht eine Prüfung nicht, bleibt die alte Datei unverändert und der Lauf wird rot – GitHub schickt dir dann eine E-Mail. Nach einem erfolgreichen Lauf wird die App automatisch neu veröffentlicht.
+
+**Jetzt sofort aktualisieren (höchstens 1× pro Tag und Quelle):** GitHub → Actions → „Daten-Update“ → „Run workflow“ → Quelle wählen → „Run workflow“.
+
+**Den Stand sehen:** In der App unter *Einstellungen → Datenstand* (Herkunft, Abrufdatum, Anzahl je Quelle).
+
+**Eigene Daten ergänzen:** *Einstellungen → Spielerdaten importieren* (JSON, CSV oder eingefügter Text, z. B. aus Excel). Du siehst zuerst eine Vorschau; gespeichert wird erst nach „Importieren“. Eigene Importe überschreiben die Online-Daten und bleiben bei Updates erhalten; „Eigene Importe löschen“ setzt sie zurück. Fehlende Werte bleiben leer und erscheinen als „–“ – es werden keine Werte erfunden.
+
 ## Für Entwickler (optional)
 
 Du brauchst das nur, wenn du lokal testen willst. Dafür muss [Node.js](https://nodejs.org) (Version 22) installiert sein.
@@ -62,7 +79,10 @@ npm run build        # fertige App im Ordner dist/
 ```
 public/logos/       Team-Logos (<KÜRZEL>.png)
 public/icons/       App-Icons (erzeugt mit scripts/make-icons.py)
-src/data/           Teams, Teamfarben
+src/data/           Teams, Datenformate, Prüfregeln, Import, Laden der Daten
+scripts/data-update/ Daten-Job (höfliches Abrufen, Zeitsteuerung, Prüfen, Speichern)
+public/data/        Daten-Dateien (draft-order, big-board, college-stats)
+data-state/         Merkzettel des Daten-Jobs (ETag, letzter Lauf)
 src/storage/        Speicher (IndexedDB mit Ersatz), Backup, Einstellungen
 src/i18n/           Texte Deutsch/Englisch
 src/ui/             Oberfläche

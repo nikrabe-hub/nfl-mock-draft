@@ -2,6 +2,7 @@
 // (z.B. vom PC aufs Handy). Eine ungültige Datei ändert nie etwas.
 
 import type { KVStorage } from './db';
+import { CACHE_PREFIX } from './keys';
 
 export const BACKUP_FORMAT = 'nfl-mock-draft-backup';
 export const BACKUP_VERSION = 1;
@@ -56,7 +57,7 @@ export function validateBackup(text: string): ValidationResult {
 export async function createBackup(storage: KVStorage, now: Date = new Date()): Promise<Backup> {
   const data: Record<string, unknown> = {};
   for (const key of (await storage.keys()).sort()) {
-    if (key.startsWith('__')) continue;
+    if (key.startsWith('__') || key.startsWith(CACHE_PREFIX)) continue;
     const value = await storage.get(key);
     if (value !== undefined) data[key] = value;
   }

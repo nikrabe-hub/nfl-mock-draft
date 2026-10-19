@@ -1,0 +1,932 @@
+{
+  "quelle": "Tankathon Big Board (tankathon.com/nfl/big-board) – Statistiken",
+  "abgerufenAm": "2026-10-19T16:30:00.000Z",
+  "version": 1,
+  "season": 2026,
+  "stats": {
+    "jeremiah-smith__ohio-state": {
+      "rec": 52,
+      "rec_yds": 984,
+      "td": 12,
+      "avg": 18.9,
+      "rush_yds": 7
+    },
+    "colin-simmons__texas": {
+      "tackles": 25,
+      "sacks": 10.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 2
+    },
+    "leonard-moore__notre-dame": {
+      "tackles": 13,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 0,
+      "ff": 0
+    },
+    "cam-coleman__texas": {
+      "rec": 20,
+      "rec_yds": 336,
+      "td": 6,
+      "avg": 16.8,
+      "rush_yds": 0
+    },
+    "charlie-becker__indiana": {
+      "rec": 39,
+      "rec_yds": 694,
+      "td": 8,
+      "avg": 17.8,
+      "rush_yds": 0
+    },
+    "drew-mestemaker__oklahoma-state": {
+      "pass_yds": 1940,
+      "td": 16,
+      "int": 6,
+      "ay_a": 9.8,
+      "rating": 167.4
+    },
+    "darian-mensah__miami": {
+      "pass_yds": 1764,
+      "td": 18,
+      "int": 1,
+      "ay_a": 12.4,
+      "rating": 203.9
+    },
+    "dylan-stewart__south-carolina": {
+      "tackles": 6,
+      "sacks": 1,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 2
+    },
+    "will-echoles__mississippi": {
+      "tackles": 18,
+      "sacks": 1.5,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "ellis-robinson__georgia": {
+      "tackles": 13,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 1,
+      "ff": 0
+    },
+    "ashton-hampton__clemson": {
+      "tackles": 19,
+      "sacks": 0,
+      "pass_def": 9,
+      "int": 1,
+      "ff": 0
+    },
+    "cj-carr__notre-dame": {
+      "pass_yds": 1639,
+      "td": 16,
+      "int": 1,
+      "ay_a": 9.9,
+      "rating": 164.5
+    },
+    "chris-cole__georgia": {
+      "tackles": 40,
+      "sacks": 2.5,
+      "pass_def": 3,
+      "int": 0,
+      "ff": 0
+    },
+    "dante-moore__oregon": {
+      "pass_yds": 926,
+      "td": 9,
+      "int": 0,
+      "ay_a": 11.2,
+      "rating": 178.3
+    },
+    "yhonzae-pierre__alabama": {
+      "tackles": 24,
+      "sacks": 3.5,
+      "pass_def": 4,
+      "int": 1,
+      "ff": 1
+    },
+    "kj-bolden__georgia": {
+      "tackles": 22,
+      "sacks": 0.5,
+      "pass_def": 2,
+      "int": 1,
+      "ff": 0
+    },
+    "jadan-baugh__florida": {
+      "rush_yds": 763,
+      "td": 13,
+      "avg": 5.7,
+      "rec_yds": 59,
+      "rec_td": 0
+    },
+    "jamari-johnson__oregon": {
+      "rec": 17,
+      "rec_yds": 224,
+      "td": 2,
+      "avg": 13.2,
+      "rush_yds": 0
+    },
+    "kelley-jones__mississippi-state": {
+      "tackles": 21,
+      "sacks": 0,
+      "pass_def": 6,
+      "int": 0,
+      "ff": 0
+    },
+    "amauri-washington__oregon": {
+      "tackles": 20,
+      "sacks": 0,
+      "pass_def": 4,
+      "int": 0,
+      "ff": 0
+    },
+    "treydez-green__lsu": {
+      "rec": 14,
+      "rec_yds": 222,
+      "td": 1,
+      "avg": 15.9,
+      "rush_yds": 7
+    },
+    "david-stone__oklahoma": {
+      "tackles": 22,
+      "sacks": 0.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "kj-duff__rutgers": {
+      "rec": 42,
+      "rec_yds": 741,
+      "td": 9,
+      "avg": 17.6,
+      "rush_yds": 0
+    },
+    "trinidad-chambliss__mississippi": {
+      "pass_yds": 1676,
+      "td": 14,
+      "int": 4,
+      "ay_a": 8.5,
+      "rating": 152.8
+    },
+    "ryan-coleman-williams__alabama": {
+      "rec": 23,
+      "rec_yds": 415,
+      "td": 4,
+      "avg": 18,
+      "rush_yds": 13
+    },
+    "tae-johnson__notre-dame": {
+      "tackles": 1,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "nick-marsh__indiana": {
+      "rec": 32,
+      "rec_yds": 585,
+      "td": 7,
+      "avg": 18.3,
+      "rush_yds": 0
+    },
+    "will-heldt__clemson": {
+      "tackles": 18,
+      "sacks": 4,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "ahmad-moten__miami": {
+      "tackles": 6,
+      "sacks": 1,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 1
+    },
+    "kyngstonn-viliamu-asa__notre-dame": {
+      "tackles": 15,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 1,
+      "ff": 0
+    },
+    "kewan-lacy__mississippi": {
+      "rush_yds": 352,
+      "td": 5,
+      "avg": 5.7,
+      "rec_yds": 27,
+      "rec_td": 0
+    },
+    "justin-scott__miami": {
+      "tackles": 19,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "ahmad-hardy__missouri": {
+      "rush_yds": 1649,
+      "td": 16,
+      "avg": 6.4,
+      "rec_yds": 22,
+      "rec_td": 0
+    },
+    "kingston-lopa__california": {
+      "tackles": 31,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 5,
+      "ff": 0
+    },
+    "matayo-uiagalelei__oregon": {
+      "tackles": 26,
+      "sacks": 6,
+      "pass_def": 0,
+      "int": 1,
+      "ff": 0
+    },
+    "zabien-brown__alabama": {
+      "tackles": 19,
+      "sacks": 0,
+      "pass_def": 4,
+      "int": 0,
+      "ff": 0
+    },
+    "devan-thompkins__alabama": {
+      "tackles": 29,
+      "sacks": 3,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 1
+    },
+    "kenyatta-jackson__ohio-state": {
+      "tackles": 22,
+      "sacks": 3,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 1
+    },
+    "sammy-brown__clemson": {
+      "tackles": 41,
+      "sacks": 1,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "reed-harris__arizona-state": {
+      "rec": 41,
+      "rec_yds": 653,
+      "td": 8,
+      "avg": 15.9,
+      "rush_yds": 0
+    },
+    "austin-simmons__missouri": {
+      "pass_yds": 1773,
+      "td": 14,
+      "int": 2,
+      "ay_a": 9.4,
+      "rating": 154.6
+    },
+    "damon-wilson__miami": {
+      "tackles": 5,
+      "sacks": 3.5,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "boubacar-traore__notre-dame": {
+      "tackles": 18,
+      "sacks": 3.5,
+      "pass_def": 1,
+      "int": 1,
+      "ff": 2
+    },
+    "ryan-wingo__texas": {
+      "rec": 26,
+      "rec_yds": 345,
+      "td": 3,
+      "avg": 13.3,
+      "rush_yds": -10
+    },
+    "xavier-gilliam__tennessee": {
+      "tackles": 23,
+      "sacks": 5,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 2
+    },
+    "jayden-maiava__southern-california": {
+      "pass_yds": 2045,
+      "td": 18,
+      "int": 3,
+      "ay_a": 10.1,
+      "rating": 168.4
+    },
+    "quincy-rhodes__arkansas": {
+      "tackles": 13,
+      "sacks": 3,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "clev-lubin__louisville": {
+      "tackles": 36,
+      "sacks": 4.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 2
+    },
+    "aj-holmes__texas-tech": {
+      "tackles": 18,
+      "sacks": 4,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "audavion-collins__penn-state": {
+      "tackles": 15,
+      "sacks": 0,
+      "pass_def": 8,
+      "int": 0,
+      "ff": 0
+    },
+    "ty-benefield__lsu": {
+      "tackles": 30,
+      "sacks": 1,
+      "pass_def": 2,
+      "int": 1,
+      "ff": 0
+    },
+    "rasheem-biles__texas": {
+      "tackles": 49,
+      "sacks": 1,
+      "pass_def": 2,
+      "int": 2,
+      "ff": 1
+    },
+    "mario-craver__texas-am": {
+      "rec": 24,
+      "rec_yds": 241,
+      "td": 2,
+      "avg": 10,
+      "rush_yds": 6
+    },
+    "koi-perich__oregon": {
+      "tackles": 40,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 2,
+      "ff": 0
+    },
+    "jelani-mcdonald__texas": {
+      "tackles": 42,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "omarion-miller__arizona-state": {
+      "rec": 35,
+      "rec_yds": 370,
+      "td": 2,
+      "avg": 10.6,
+      "rush_yds": 5
+    },
+    "deuce-alexander__mississippi": {
+      "rec": 35,
+      "rec_yds": 523,
+      "td": 5,
+      "avg": 14.9,
+      "rush_yds": 20
+    },
+    "john-henry-daley__michigan": {
+      "tackles": 19,
+      "sacks": 4,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "princewill-umanmielen__lsu": {
+      "tackles": 27,
+      "sacks": 8,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "dom-nichols__michigan": {
+      "tackles": 16,
+      "sacks": 2.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "tavion-gadson__kentucky": {
+      "tackles": 24,
+      "sacks": 3,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "wyatt-young__oklahoma-state": {
+      "rec": 32,
+      "rec_yds": 561,
+      "td": 5,
+      "avg": 17.5,
+      "rush_yds": 14
+    },
+    "jaylen-mcclain__ohio-state": {
+      "tackles": 32,
+      "sacks": 1,
+      "pass_def": 4,
+      "int": 2,
+      "ff": 1
+    },
+    "duce-robinson__florida-state": {
+      "rec": 22,
+      "rec_yds": 407,
+      "td": 4,
+      "avg": 18.5,
+      "rush_yds": -12
+    },
+    "zach-lutmer__iowa": {
+      "tackles": 34,
+      "sacks": 0,
+      "pass_def": 4,
+      "int": 0,
+      "ff": 0
+    },
+    "oj-frederique__miami": {
+      "tackles": 1,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "anthony-smith__minnesota": {
+      "tackles": 13,
+      "sacks": 1.5,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "bryant-wesco__clemson": {
+      "rec": 29,
+      "rec_yds": 340,
+      "td": 0,
+      "avg": 11.7,
+      "rush_yds": -7
+    },
+    "jackson-bennee__utah": {
+      "tackles": 24,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 2,
+      "ff": 0
+    },
+    "bray-hubbard__alabama": {
+      "tackles": 37,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 2,
+      "ff": 1
+    },
+    "luke-reynolds__virginia-tech": {
+      "rec": 43,
+      "rec_yds": 449,
+      "td": 4,
+      "avg": 10.4,
+      "rush_yds": 1
+    },
+    "chris-peal__syracuse": {
+      "tackles": 29,
+      "sacks": 0,
+      "pass_def": 3,
+      "int": 0,
+      "ff": 0
+    },
+    "lanorris-sellers__south-carolina": {
+      "pass_yds": 1338,
+      "td": 12,
+      "int": 4,
+      "ay_a": 7.5,
+      "rating": 138.5
+    },
+    "corey-myrick__clemson": {
+      "tackles": 44,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "suntarine-perkins__mississippi": {
+      "tackles": 20,
+      "sacks": 1.5,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "jordan-ross__lsu": {
+      "tackles": 20,
+      "sacks": 2.5,
+      "pass_def": 3,
+      "int": 1,
+      "ff": 1
+    },
+    "jide-abasiri__southern-california": {
+      "tackles": 16,
+      "sacks": 1,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "terrance-carter__texas-tech": {
+      "rec": 14,
+      "rec_yds": 137,
+      "td": 1,
+      "avg": 9.8,
+      "rush_yds": 3
+    },
+    "teitum-tuioti__oregon": {
+      "tackles": 30,
+      "sacks": 3,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "jamari-sharpe__indiana": {
+      "tackles": 19,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 1,
+      "ff": 0
+    },
+    "brendan-sorsby__texas-tech": {
+      "pass_yds": 2800,
+      "td": 27,
+      "int": 5,
+      "ay_a": 9.3,
+      "rating": 155.1
+    },
+    "brice-pollock__texas-tech": {
+      "tackles": 16,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 2,
+      "ff": 0
+    },
+    "bear-alexander__oregon": {
+      "tackles": 30,
+      "sacks": 2,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "christian-alliegro__ohio-state": {
+      "tackles": 21,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "vicari-swain__south-carolina": {
+      "tackles": 16,
+      "sacks": 1,
+      "pass_def": 3,
+      "int": 1,
+      "ff": 0
+    },
+    "sahir-west__ucla": {
+      "tackles": 22,
+      "sacks": 2,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "junior-sherrill__vanderbilt": {
+      "rec": 41,
+      "rec_yds": 628,
+      "td": 4,
+      "avg": 15.3,
+      "rush_yds": 3
+    },
+    "nate-frazier__georgia": {
+      "rush_yds": 230,
+      "td": 5,
+      "avg": 6.6,
+      "rec_yds": 21,
+      "rec_td": 0
+    },
+    "jayden-jackson__oklahoma": {
+      "tackles": 18,
+      "sacks": 0.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "ben-roberts__texas-tech": {
+      "tackles": 39,
+      "sacks": 1,
+      "pass_def": 3,
+      "int": 1,
+      "ff": 2
+    },
+    "horace-lockett__central-florida": {
+      "tackles": 17,
+      "sacks": 0.5,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "tony-rojas__penn-state": {
+      "tackles": 56,
+      "sacks": 5,
+      "pass_def": 2,
+      "int": 2,
+      "ff": 1
+    },
+    "justice-haynes__georgia-tech": {
+      "rush_yds": 462,
+      "td": 3,
+      "avg": 5.3,
+      "rec_yds": 47,
+      "rec_td": 2
+    },
+    "jyaire-hill__michigan": {
+      "tackles": 31,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 1,
+      "ff": 0
+    },
+    "mark-fletcher__miami": {
+      "rush_yds": 373,
+      "td": 6,
+      "avg": 5.5,
+      "rec_yds": 26,
+      "rec_td": 0
+    },
+    "isaac-brown__louisville": {
+      "rush_yds": 568,
+      "td": 4,
+      "avg": 6.8,
+      "rec_yds": 108,
+      "rec_td": 1
+    },
+    "john-nestor__minnesota": {
+      "tackles": 20,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 1,
+      "ff": 0
+    },
+    "anto-saka__texas-am": {
+      "tackles": 10,
+      "sacks": 0.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "jordan-faison__notre-dame": {
+      "rec": 34,
+      "rec_yds": 451,
+      "td": 4,
+      "avg": 13.3,
+      "rush_yds": 0
+    },
+    "dj-mckinney__notre-dame": {
+      "tackles": 9,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 1,
+      "ff": 0
+    },
+    "xavier-atkins__auburn": {
+      "tackles": 37,
+      "sacks": 3,
+      "pass_def": 0,
+      "int": 1,
+      "ff": 0
+    },
+    "taylor-wein__oklahoma": {
+      "tackles": 21,
+      "sacks": 1.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 1
+    },
+    "mateen-ibirogba__texas-tech": {
+      "tackles": 11,
+      "sacks": 2,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "lj-martin__brigham-young": {
+      "rush_yds": 344,
+      "td": 3,
+      "avg": 7.8,
+      "rec_yds": 41,
+      "rec_td": 0
+    },
+    "whit-weeks__lsu": {
+      "tackles": 23,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "francis-brewu__notre-dame": {
+      "tackles": 16,
+      "sacks": 2,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "peter-clarke__temple": {
+      "rec": 17,
+      "rec_yds": 269,
+      "td": 2,
+      "avg": 15.8,
+      "rush_yds": 0
+    },
+    "zeke-berry__michigan": {
+      "tackles": 15,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "tj-moore__clemson": {
+      "rec": 27,
+      "rec_yds": 244,
+      "td": 1,
+      "avg": 9,
+      "rush_yds": 0
+    },
+    "kayin-lee__tennessee": {
+      "tackles": 15,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 2,
+      "ff": 0
+    },
+    "cooper-barkate__miami": {
+      "rec": 21,
+      "rec_yds": 269,
+      "td": 4,
+      "avg": 12.8,
+      "rush_yds": 0
+    },
+    "wendell-gregory__kansas-state": {
+      "tackles": 21,
+      "sacks": 2.5,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 0
+    },
+    "jermaine-mathews__ohio-state": {
+      "tackles": 27,
+      "sacks": 0,
+      "pass_def": 5,
+      "int": 0,
+      "ff": 0
+    },
+    "keon-sabb__alabama": {
+      "tackles": 19,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 1
+    },
+    "drayk-bowen__notre-dame": {
+      "tackles": 38,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "adam-trick__texas-tech": {
+      "tackles": 12,
+      "sacks": 1,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 2
+    },
+    "jalen-mayo__houston": {
+      "tackles": 22,
+      "sacks": 1,
+      "pass_def": 5,
+      "int": 1,
+      "ff": 1
+    },
+    "hollywood-smothers__texas": {
+      "rush_yds": 289,
+      "td": 2,
+      "avg": 4.4,
+      "rec_yds": 79,
+      "rec_td": 1
+    },
+    "christian-gray__notre-dame": {
+      "tackles": 10,
+      "sacks": 0,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "benjamin-brahmer__penn-state": {
+      "rec": 21,
+      "rec_yds": 206,
+      "td": 3,
+      "avg": 9.8,
+      "rush_yds": 0
+    },
+    "eli-bowen__oklahoma": {
+      "tackles": 12,
+      "sacks": 0,
+      "pass_def": 2,
+      "int": 0,
+      "ff": 0
+    },
+    "peyton-bowen__oklahoma": {
+      "tackles": 29,
+      "sacks": 1,
+      "pass_def": 5,
+      "int": 1,
+      "ff": 1
+    },
+    "nyck-harbor__south-carolina": {
+      "rec": 17,
+      "rec_yds": 278,
+      "td": 2,
+      "avg": 16.4,
+      "rush_yds": 0
+    },
+    "amare-ferrell__indiana": {
+      "tackles": 34,
+      "sacks": 0,
+      "pass_def": 3,
+      "int": 2,
+      "ff": 0
+    },
+    "dashawn-spears__lsu": {
+      "tackles": 7,
+      "sacks": 1,
+      "pass_def": 1,
+      "int": 0,
+      "ff": 0
+    },
+    "eric-singleton__florida": {
+      "rec": 10,
+      "rec_yds": 93,
+      "td": 0,
+      "avg": 9.3,
+      "rush_yds": 8
+    },
+    "elijah-green__tulsa": {
+      "tackles": 59,
+      "sacks": 0,
+      "pass_def": 7,
+      "int": 5,
+      "ff": 0
+    },
+    "raylen-wilson__georgia": {
+      "tackles": 43,
+      "sacks": 4,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 2
+    },
+    "griffin-wilde__northwestern": {
+      "rec": 30,
+      "rec_yds": 482,
+      "td": 3,
+      "avg": 16.1,
+      "rush_yds": 0
+    },
+    "marcus-neal__penn-state": {
+      "tackles": 22,
+      "sacks": 0,
+      "pass_def": 0,
+      "int": 0,
+      "ff": 2
+    },
+    "mike-matthews__tennessee": {
+      "rec": 29,
+      "rec_yds": 481,
+      "td": 3,
+      "avg": 16.6,
+      "rush_yds": 4
+    },
+    "devin-mccuin__ohio-state": {
+      "rec": 19,
+      "rec_yds": 268,
+      "td": 2,
+      "avg": 14.1,
+      "rush_yds": 0
+    }
+  }
+}

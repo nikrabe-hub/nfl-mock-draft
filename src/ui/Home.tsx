@@ -1,5 +1,6 @@
 import { TEAMS } from '../data/teams';
 import { useT } from '../i18n';
+import { dataStore } from '../data/loader';
 import { pwaState } from '../pwa';
 import { storageInfo } from '../storage/db';
 import { useStore } from '../store';
@@ -11,6 +12,7 @@ export function Home() {
   const t = useT();
   const pwa = useStore(pwaState);
   const storage = useStore(storageInfo);
+  const data = useStore(dataStore);
 
   return (
     <section aria-labelledby="home-title">
@@ -30,7 +32,7 @@ export function Home() {
 
       <div class="card">
         <h2>{t('home.wip.title')}</h2>
-        <p>{t('home.wip.body')}</p>
+        <p data-testid="home-data">{t('home.wip.body', { players: data.players.filter((p) => !p.notListed).length, picks: data.picks.length })}</p>
       </div>
 
       <h2 class="section-title">{t('home.teams')}</h2>

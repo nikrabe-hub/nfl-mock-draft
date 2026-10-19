@@ -5,6 +5,7 @@ import { applyBackup, backupFileName, createBackup, validateBackup, type Backup 
 import { getStorage, readPersistence, storageInfo } from '../storage/db';
 import { LANGS, loadSettings, settingsStore, THEMES, updateSettings } from '../storage/settings';
 import { useStore } from '../store';
+import { DataStatus, ImportCard } from './DataSection';
 
 interface Msg {
   kind: 'ok' | 'error';
@@ -133,8 +134,10 @@ export function Settings() {
 
       <div class="card">
         <h2>{t('settings.data.title')}</h2>
-        <p data-testid="data-status">{t('settings.data.none')}</p>
+        <DataStatus />
       </div>
+
+      <ImportCard />
 
       <div class="card">
         <h2>{t('settings.storage.title')}</h2>
@@ -214,7 +217,7 @@ export function Settings() {
           {t('settings.about.version')}: {__APP_VERSION__}
         </p>
         <p>
-          {t('settings.about.sources')}: <span class="muted">{t('settings.about.sources.none')}</span>
+          {t('settings.about.sources')}: <span class="muted">{t('settings.about.sources.list')}</span>
         </p>
       </div>
     </section>

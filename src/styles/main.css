@@ -471,3 +471,51 @@ button {
     padding: 3px;
   }
 }
+
+/* --- Daten & Import --- */
+.source-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.source-item {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.source-item strong {
+  display: block;
+}
+
+.source-item .small {
+  display: block;
+  margin-top: 2px;
+}
+
+.import-text {
+  width: 100%;
+  min-height: 110px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.plain-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.plain-list li + li {
+  margin-top: 2px;
+}
