@@ -3,7 +3,7 @@
 // Die Schreibvorgänge laufen nacheinander. Kommen schnell mehrere Picks (Tempo "sofort"), wird nur der
 // jeweils neueste Stand geschrieben – der ältere wäre ohnehin sofort überholt. Der letzte Pick geht nie verloren.
 
-import { getStorage, type KVStorage } from '../storage/db';
+import { getStorage, overrideStorageForTests, type KVStorage } from '../storage/db';
 import { KEYS } from '../storage/keys';
 import { sanitizeSession, type DraftSession } from './engine';
 
@@ -17,6 +17,7 @@ let storageOverride: KVStorage | undefined;
 /** Nur für Tests. */
 export function useStorageForTests(storage: KVStorage | undefined): void {
   storageOverride = storage;
+  overrideStorageForTests(storage);
 }
 
 async function flush(): Promise<void> {

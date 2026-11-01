@@ -11,9 +11,13 @@ export interface DraftPrefs {
   rounds: number;
   tempo: Tempo;
   randomness: Randomness;
+  /** Die KI wählt auch für die eigenen Teams. */
+  autoPick: boolean;
+  /** Computer-Teams dürfen dir Trades anbieten. */
+  tradeOffers: boolean;
 }
 
-export const DEFAULT_PREFS: DraftPrefs = { userTeams: [], rounds: 1, tempo: 'normal', randomness: 'realistic' };
+export const DEFAULT_PREFS: DraftPrefs = { userTeams: [], rounds: 1, tempo: 'normal', randomness: 'realistic', autoPick: false, tradeOffers: true };
 
 export function sanitizePrefs(raw: unknown): DraftPrefs {
   const r = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
@@ -23,6 +27,8 @@ export function sanitizePrefs(raw: unknown): DraftPrefs {
     rounds: r.rounds === undefined ? DEFAULT_PREFS.rounds : clampRounds(r.rounds),
     tempo: TEMPOS.includes(r.tempo as Tempo) ? (r.tempo as Tempo) : DEFAULT_PREFS.tempo,
     randomness: RANDOMNESS_LEVELS.includes(r.randomness as Randomness) ? (r.randomness as Randomness) : DEFAULT_PREFS.randomness,
+    autoPick: r.autoPick === true,
+    tradeOffers: r.tradeOffers === undefined ? DEFAULT_PREFS.tradeOffers : r.tradeOffers === true,
   };
 }
 

@@ -227,8 +227,15 @@ export async function createStorage(opts: { prefer?: Backend; onChange?: (b: Bac
 }
 
 let shared: Promise<KVStorage> | undefined;
+let testOverride: KVStorage | undefined;
+
+/** Nur für Tests: alle Module nutzen dann diesen Speicher. */
+export function overrideStorageForTests(storage: KVStorage | undefined): void {
+  testOverride = storage;
+}
 
 export function getStorage(): Promise<KVStorage> {
+  if (testOverride) return Promise.resolve(testOverride);
   if (!shared) {
     shared = createStorage({
       onChange: (backend) => storageInfo.set({ backend }),

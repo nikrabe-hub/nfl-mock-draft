@@ -9,6 +9,8 @@ export const KEYS = {
   watchlist: 'watchlist',
   needsOverride: 'needsOverride',
   orderOverride: 'orderOverride',
+  /** Eigene Trade-Wertchart (ersetzt die eingebaute Näherung). */
+  tradeChart: 'tradeChart',
   /** Eigene Importe (Overlay über dem Big Board). */
   dataOverlay: 'dataOverlay',
 } as const;

@@ -1,20 +1,24 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { discardDraft, draftStore } from '../draft/controller';
+import { discardDraft, draftStore, nudge } from '../draft/controller';
 import { isUserTurn } from '../draft/engine';
+import { prefsStore, updatePrefs } from '../draft/prefs';
 import { useT } from '../i18n';
 import { useStore } from '../store';
 import { Board } from './Board';
 import { TempoControl } from './DraftOptions';
 import { PickPanel } from './PickPanel';
+import { useMedia } from './useMedia';
 
 export function DraftView({ onLeave }: { onLeave: () => void }) {
   const t = useT();
   const ui = useStore(draftStore);
   const s = ui.session;
+  const prefs = useStore(prefsStore);
   const turn = !!s && isUserTurn(s);
   const [view, setView] = useState<'pick' | 'board'>(turn ? 'pick' : 'board');
   const [confirm, setConfirm] = useState(false);
   const wasTurn = useRef(turn);
+  const wide = useMedia('(min-width: 900px)');
 
   // Kommt man an die Reihe, wechselt die Handy-Ansicht von selbst zur Spielerliste.
   useEffect(() => {
@@ -40,6 +44,24 @@ export function DraftView({ onLeave }: { onLeave: () => void }) {
           <div class="progress-bar" style={{ width: `${pct}%` }} />
         </div>
         <TempoControl />
+        {s.status === 'running' && (
+          <button
+            type="button"
+            class={prefs.autoPick ? 'auto-toggle on' : 'auto-toggle'}
+            role="switch"
+            aria-checked={prefs.autoPick}
+            data-testid="auto-toggle"
+            onClick={() => {
+              void updatePrefs({ autoPick: !prefs.autoPick });
+              nudge();
+            }}
+          >
+            <span class="switch-dot" aria-hidden="true" />
+            <span>
+              {t('auto.label')}: {prefs.autoPick ? t('auto.on') : t('auto.off')}
+            </span>
+          </button>
+        )}
         {confirm && (
           <div class="notice" role="alertdialog" aria-label={t('resume.confirm')}>
             <p>{t('resume.confirm')}</p>
@@ -74,7 +96,7 @@ export function DraftView({ onLeave }: { onLeave: () => void }) {
 
       <div class="draft-grid">
         <div class={view === 'board' ? 'pane pane-board' : 'pane pane-board mobile-hide'}>
-          <Board session={s} lastIndex={ui.lastIndex} />
+          <Board session={s} lastIndex={ui.lastIndex} active={wide || view === 'board'} />
         </div>
         <div class={view === 'pick' ? 'pane pane-pick' : 'pane pane-pick mobile-hide'}>
           <PickPanel session={s} onLeave={onLeave} />

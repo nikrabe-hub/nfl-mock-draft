@@ -1,7 +1,11 @@
 import { render } from 'preact';
 import { dataStore, loadData } from './data/loader';
 import { resumeDraft } from './draft/controller';
+import { loadHistory } from './draft/history';
+import { loadChart } from './draft/tradeChart';
+import { loadOverrides } from './draft/overrides';
 import { loadPrefs } from './draft/prefs';
+import { loadWatchlist } from './draft/watchlist';
 import { initInstallPrompt, initPwa } from './pwa';
 import { applySettings, loadSettings, settingsStore } from './storage/settings';
 import './styles/main.css';
@@ -15,5 +19,9 @@ void loadSettings();
 void loadData().catch(() => dataStore.set({ ...dataStore.get(), loaded: true }));
 // Gespeicherten Draft und Optionen lesen; ein laufender Draft geht an derselben Stelle weiter.
 void loadPrefs().then(resumeDraft).catch(() => {});
+void loadOverrides();
+void loadHistory();
+void loadChart();
+void loadWatchlist();
 initInstallPrompt();
 initPwa();

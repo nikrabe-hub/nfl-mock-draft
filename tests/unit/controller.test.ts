@@ -1,7 +1,8 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { dataStore } from '../../src/data/loader';
-import { autoPickNow, discardDraft, draftStore, resumeDraft, startDraft, userPick, whenIdle } from '../../src/draft/controller';
+import { autoPickNow, discardDraft, draftStore, nudge, resumeDraft, startDraft, userPick, whenIdle } from '../../src/draft/controller';
+import { historyStore, whenHistorySaved } from '../../src/draft/history';
 import { currentSlot, isUserTurn } from '../../src/draft/engine';
 import { DEFAULT_PREFS, prefsStore, sanitizePrefs } from '../../src/draft/prefs';
 import { loadSession, saveSession, useStorageForTests, whenSaved } from '../../src/draft/persist';
@@ -183,7 +184,79 @@ describe('Voreinstellungen', () => {
       rounds: 7,
       tempo: 'normal',
       randomness: 'realistic',
+      autoPick: false,
+      tradeOffers: true,
     });
+    expect(sanitizePrefs({ tradeOffers: false }).tradeOffers).toBe(false);
     expect(sanitizePrefs({ rounds: 0 }).rounds).toBe(1);
+    expect(sanitizePrefs({ autoPick: true }).autoPick).toBe(true);
+    expect(sanitizePrefs({ autoPick: 'ja' }).autoPick).toBe(false);
+  });
+});
+
+describe('Auto-Pick für eigene Teams', () => {
+  it('spielt mit Auto-Pick an den ganzen Draft ohne Eingriff durch und markiert die eigenen Picks als Auto', async () => {
+    await setup({ rounds: 2 });
+    await startDraft({ seed: 3 });
+    await whenIdle();
+    prefsStore.set({ ...prefsStore.get(), autoPick: true });
+    nudge();
+    await whenIdle();
+    const s = draftStore.get().session!;
+    expect(s.status).toBe('finished');
+    const mine = s.order.map((o, i) => ({ o, r: s.results[i] })).filter((x) => x.o.team === 'LAC');
+    expect(mine.length).toBeGreaterThan(0);
+    expect(mine.every((x) => x.r?.auto === true)).toBe(true);
+    expect(s.results.filter((_r, i) => s.order[i].team !== 'LAC').every((r) => !r.auto)).toBe(true);
+    prefsStore.set({ ...prefsStore.get(), autoPick: false });
+  });
+
+  it('Auto-Pick mitten im Draft einschalten setzt am eigenen Pick fort (nudge)', async () => {
+    await setup({ rounds: 1 });
+    prefsStore.set({ ...prefsStore.get(), autoPick: false });
+    await startDraft({ seed: 4 });
+    await whenIdle();
+    expect(isUserTurn(draftStore.get().session!)).toBe(true);
+    prefsStore.set({ ...prefsStore.get(), autoPick: true });
+    nudge();
+    await whenIdle();
+    expect(draftStore.get().session!.status).toBe('finished');
+    prefsStore.set({ ...prefsStore.get(), autoPick: false });
+  });
+});
+
+describe('Auto-Pick wird bei neuem Draft zurückgesetzt', () => {
+  it('ein neuer Draft beginnt mit eigenem Zug, auch wenn Auto-Pick vorher an war', async () => {
+    await setup({ rounds: 1 });
+    prefsStore.set({ ...prefsStore.get(), autoPick: true });
+    await startDraft({ seed: 6 });
+    await whenIdle();
+    expect(prefsStore.get().autoPick).toBe(false);
+    const s = draftStore.get().session!;
+    expect(s.status).toBe('running');
+    expect(isUserTurn(s)).toBe(true);
+  });
+});
+
+describe('Verlauf wird beim Ende gespeichert', () => {
+  it('ein beendeter Draft landet genau einmal im Verlauf', async () => {
+    const storage = await setup({ rounds: 1 });
+    historyStore.set({ loaded: true, mocks: [] });
+    await storage.remove(KEYS.mocks);
+    await startDraft({ seed: 5 });
+    await whenIdle();
+    prefsStore.set({ ...prefsStore.get(), autoPick: true });
+    nudge();
+    await whenIdle();
+    await whenHistorySaved();
+    // erneutes Fortsetzen (Neuladen) darf keinen zweiten Eintrag erzeugen
+    await resumeDraft();
+    await whenIdle();
+    await whenHistorySaved();
+    const mocks = historyStore.get().mocks;
+    expect(mocks).toHaveLength(1);
+    expect(mocks[0].userTeams).toEqual(['LAC']);
+    expect(mocks[0].picks.length).toBe(draftStore.get().session!.results.length);
+    prefsStore.set({ ...prefsStore.get(), autoPick: false });
   });
 });

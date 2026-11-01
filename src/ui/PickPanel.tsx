@@ -1,13 +1,21 @@
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { autoPickNow, discardDraft, draftStore, userPick } from '../draft/controller';
 import { availablePlayers, currentSlot, isUserTeam, needStatus, remainingPicks, teamDrafted, type DraftSession } from '../draft/engine';
-import { getTeam, teamLabel } from '../data/teams';
+import { getTeam } from '../data/teams';
+import { recapFromMock } from '../export/recap';
+import { recordFromSession } from '../draft/history';
 import { useT } from '../i18n';
 import { useStore } from '../store';
 import { PlayerList } from './PlayerList';
+import { AllTeamsList, ResultBlock, StealsReaches, TradeLog } from './Results';
+import { OfferCard, TradePanel } from './TradePanel';
 import { TeamLogo } from './TeamLogo';
 
 type Tab = 'draft' | 'trade' | 'analysis';
+
+const draftPlayer = (id: string) => {
+  userPick(id);
+};
 
 function NeedChips({ session, team }: { session: DraftSession; team: string }) {
   const t = useT();
@@ -57,31 +65,28 @@ function Analysis({ session, team }: { session: DraftSession; team: string }) {
 function Finished({ session, onNew }: { session: DraftSession; onNew: () => void }) {
   const t = useT();
   const mine = session.config.userTeams;
+  const record = useMemo(() => recordFromSession(session), [session]);
+  const hasPicks = mine.some((team) => teamDrafted(session, team).length > 0);
   return (
     <div class="card panel" data-testid="finished-panel">
       <h2>{t('finished.title')}</h2>
       <p>{session.endReason === 'pool_empty' ? t('finished.poolEmpty', { count: session.results.length }) : t('finished.complete', { count: session.results.length })}</p>
       <h3 class="sub">{t('finished.mine')}</h3>
-      {mine.every((team) => teamDrafted(session, team).length === 0) ? (
-        <p class="muted small">{t('finished.none')}</p>
-      ) : (
-        mine.map((team) => {
-          const picks = teamDrafted(session, team);
-          if (picks.length === 0) return null;
-          return (
-            <div key={team} class="mine-block">
-              <strong>{teamLabel(team)}</strong>
-              <ul class="plain-list">
-                {picks.map((p) => (
-                  <li key={p.id}>
-                    {p.name} ({p.pos}, {p.college || '–'})
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })
-      )}
+      {!hasPicks
+        ? <p class="muted small">{t('finished.none')}</p>
+        : mine.map((team) => {
+            const recap = recapFromMock(record, team);
+            return recap ? <ResultBlock key={team} recap={recap} /> : null;
+          })}
+      <p class="small muted hint" data-testid="grade-explain">
+        {t('grade.explain')}
+      </p>
+      <StealsReaches picks={record.picks} />
+      <TradeLog trades={record.trades} />
+      <AllTeamsList record={record} />
+      <p class="small muted" data-testid="history-note">
+        {t('finished.saved')}
+      </p>
       <div class="row">
         <button type="button" class="btn" data-testid="finished-new" onClick={onNew}>
           {t('finished.new')}
@@ -143,6 +148,7 @@ export function PickPanel({ session, onLeave }: { session: DraftSession; onLeave
         </div>
       </div>
       <NeedChips session={session} team={slot.team} />
+      <OfferCard session={session} />
 
       <div class="segmented tabs" role="group" aria-label={t('panel.tabs')}>
         {(['draft', 'trade', 'analysis'] as const).map((x) => (
@@ -153,16 +159,18 @@ export function PickPanel({ session, onLeave }: { session: DraftSession; onLeave
       </div>
 
       {tab === 'draft' && (
-        <>
-          <div class="row">
-            <button type="button" class="btn btn-secondary" data-testid="auto-pick" onClick={() => autoPickNow()}>
+        <PlayerList
+          players={availablePlayers(session)}
+          canDraft
+          onDraft={draftPlayer}
+          extra={
+            <button type="button" class="btn btn-secondary btn-compact" data-testid="auto-pick" onClick={() => autoPickNow()}>
               {t('panel.auto')}
             </button>
-          </div>
-          <PlayerList players={availablePlayers(session)} canDraft onDraft={(id) => userPick(id)} />
-        </>
+          }
+        />
       )}
-      {tab === 'trade' && <p class="notice">{t('panel.trade.soon')}</p>}
+      {tab === 'trade' && <TradePanel session={session} team={slot.team} />}
       {tab === 'analysis' && <Analysis session={session} team={slot.team} />}
     </div>
   );

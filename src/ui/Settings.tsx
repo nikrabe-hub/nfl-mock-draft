@@ -6,8 +6,14 @@ import { getStorage, readPersistence, storageInfo } from '../storage/db';
 import { LANGS, loadSettings, settingsStore, THEMES, updateSettings } from '../storage/settings';
 import { useStore } from '../store';
 import { resumeDraft } from '../draft/controller';
-import { loadPrefs } from '../draft/prefs';
+import { loadHistory } from '../draft/history';
+import { loadChart } from '../draft/tradeChart';
+import { loadOverrides } from '../draft/overrides';
+import { loadPrefs, prefsStore, updatePrefs } from '../draft/prefs';
+import { loadWatchlist } from '../draft/watchlist';
 import { DataStatus, ImportCard } from './DataSection';
+import { ChartImport } from './ChartImport';
+import { NeedsEditor, OrderEditor } from './Editors';
 import { RandomnessControl, TempoControl } from './DraftOptions';
 
 interface Msg {
@@ -19,6 +25,7 @@ interface Msg {
 export function Settings() {
   const t = useT();
   const settings = useStore(settingsStore);
+  const prefs = useStore(prefsStore);
   const info = useStore(storageInfo);
   const install = useStore(installState);
   const [msg, setMsg] = useState<Msg | null>(null);
@@ -76,6 +83,10 @@ export function Settings() {
       const { written } = await applyBackup(await getStorage(), pending);
       await loadSettings();
       await loadPrefs();
+      await loadHistory();
+      await loadOverrides();
+      await loadChart();
+      await loadWatchlist();
       await resumeDraft();
       setMsg({ kind: 'ok', key: 'settings.backup.restored', params: { count: written } });
     } catch {
@@ -149,8 +160,18 @@ export function Settings() {
           <span class="label">{t('setup.tempo')}</span>
           <TempoControl />
         </div>
+        <label class="check">
+          <input type="checkbox" checked={prefs.tradeOffers} data-testid="settings-offers" onChange={() => void updatePrefs({ tradeOffers: !prefs.tradeOffers })} />
+          <span>{t('settings.tradeOffers')}</span>
+        </label>
         <p class="muted small hint">{t('draft.needs.estimated')}</p>
       </div>
+
+      <NeedsEditor />
+
+      <OrderEditor />
+
+      <ChartImport />
 
       <div class="card">
         <h2>{t('settings.data.title')}</h2>

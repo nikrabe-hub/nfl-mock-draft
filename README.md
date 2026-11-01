@@ -2,8 +2,8 @@
 
 Ein Mock-Draft-Simulator für den NFL Draft 2027. Er läuft im Browser auf PC und Handy, lässt sich wie eine App installieren und funktioniert nach dem ersten Laden **komplett offline**.
 
-> Stand: **Phase 4 (Draft-Kern)**. Teams, Logos, Speicherung, Backup, Dark Mode, DE/EN, Offline-Betrieb, Daten und der Draft selbst
-> (Teamauswahl, Board, eigene Picks, KI-Picks, Autosave) sind fertig. Trades, Watchlist, Analyse-Noten, PNG-Export und Mock-Verlauf folgen in Phase 5.
+> Stand: **Phase 5 (Erweiterungen)**. Teams, Logos, Speicherung, Backup, Dark Mode, DE/EN, Offline-Betrieb, Daten und der Draft selbst
+> (Teamauswahl, Board, eigene Picks, KI-Picks, Autosave) sind fertig. Trades, Watchlist, Auto-Pick, Noten, PNG-Export, Mock-Verlauf und das Bearbeiten von Needs und Pick-Besitzern sind ebenfalls fertig (Phase 5).
 
 ## Die App öffnen und aufs Handy holen
 
@@ -28,8 +28,44 @@ Tempo: *Langsam* und *Normal* lassen die Computer-Teams mit kleiner Pause ziehen
 ### Wichtige Hinweise (ehrlich, keine stillen Annahmen)
 
 - **Zu wenige Spieler:** Das Tankathon Big Board liefert aktuell nur **162 Spieler**, ein 7-Runden-Draft hat aber 257 Picks. Die App erfindet keine Spieler: Der Draft endet nach dem letzten Spieler, die übrigen Picks bleiben leer. Vor dem Start zeigt die App eine Warnung. Mehr Spieler kannst du in den Einstellungen importieren (siehe unten).
-- **Team-Needs sind Schätzungen:** Es gibt keine abrufbare Quelle für Needs. Die eingebauten Needs (`src/draft/needs.ts`) sind meine groben Schätzungen vom Sommer 2026 und in der App als „geschätzt“ gekennzeichnet. Das Bearbeiten in der App folgt in Phase 5.
+- **Team-Needs sind Schätzungen:** Es gibt keine abrufbare Quelle für Needs. Die eingebauten Needs (`src/draft/needs.ts`) sind meine groben Schätzungen vom Sommer 2026 und in der App als „geschätzt“ gekennzeichnet. Du kannst sie in den Einstellungen unter „Team-Needs bearbeiten“ ändern.
 - **Fehlende Angaben** (ADP, Scouting-Profil, Alter, Klasse) bleiben leer und erscheinen als „–“.
+
+## Noten und PNG-Übersicht
+
+Jeder Pick bekommt eine Note von **A+ bis F-** (15 Stufen), ebenso jedes Team. Die Noten stehen live im Board und am Ende im Abschluss-Fenster.
+
+- **60 % Needs:** Hat der Pick ein Need des Teams abgedeckt? Das 1. Need zählt am meisten (100 Punkte), das 5. Need 60. Ein Spieler auf einer Position, die das Team schon besetzt hat, zählt weniger (55 bzw. 35). Eine Position ohne Need ergibt 50.
+- **40 % Value:** Verhältnis von Spieler-Rank zur Pick-Nummer. Rank = Pick ergibt 82 Punkte, ein „Steal“ (Spieler war besser eingestuft) bis 100, ein „Reach“ deutlich weniger.
+- **Team-Note:** Durchschnitt der Pick-Werte; frühe Runden zählen stärker.
+
+Die Grenzen der Noten sind mit simulierten Drafts geprüft: Der Durchschnitt liegt bei etwa B-/B, extreme Noten (A+ und F) sind selten. **Die Needs sind eigene Schätzungen, nicht aus einer Quelle** – die Noten sind deshalb eine Orientierung, kein Urteil.
+
+Nach dem Draft gibt es pro eigenem Team den Knopf **„Als PNG speichern“** (1080 px breit, funktioniert auch offline). Auf Handys mit Teilen-Funktion erscheint zusätzlich **„Teilen“**.
+
+## Performance und Handy-Layout
+
+- Die Spielerliste lädt in Portionen und zeichnet nur geänderte Zeilen neu, das Board nur geänderte Picks.
+- Das Layout ist für große Handys (z. B. Galaxy S24 Ultra, 412 px Breite) mit größerer Schrift und mindestens 44 px großen Tippflächen ausgelegt; automatische Tests prüfen 360 px, 412 px und PC-Breite.
+- Logos werden beim Einfügen auf höchstens 150 KB geprüft (ein 4K-Logo würde die Liste verlangsamen).
+
+## Watchlist, Auto-Pick und Verlauf
+
+- **Watchlist:** In der Spielerliste markierst du Spieler mit dem Stern. Der Filter „★ Watchlist“ zeigt nur diese. Die Liste wird automatisch gespeichert und ist Teil des Backups.
+- **Auto-Pick:** Der Schalter „Auto-Pick“ im Draft lässt die KI auch für deine Teams wählen (z. B. um schnell durchzuspielen). Jeder neue Draft startet wieder ohne Auto-Pick.
+- **Steals & Reaches:** Nach dem Draft siehst du die fünf größten Steals und Reaches. Die Abweichung ist Pick-Nr. minus Rank im Big Board.
+- **Mock-Verlauf:** Jeder beendete Draft wird automatisch gespeichert (die letzten 25). Im Tab „Verlauf“ kannst du Mocks ansehen, das PNG daraus erzeugen, löschen und zwei Mocks vergleichen. Auch der Verlauf ist im Backup.
+
+## Trades
+
+- Im Tab „Trade“ (wenn du am Pick bist) wählst du ein Computer-Team und tauschst Picks gegen Picks, auch Picks 2028. Die Live-Anzeige zeigt, ob das Team annehmen würde. Computer-Teams tauschen nie untereinander.
+- **Computer-Angebote:** Gelegentlich bietet ein Computer-Team an, nach oben zu tauschen: seine späteren Picks (plus ggf. 2028-Picks) für deinen aktuellen Pick. Die Chance ist in Runde 1 am größten. Ausschalten kannst du das im Trade-Tab oder in den Einstellungen.
+- **Wertchart (ehrlich):** Die Original-Tabelle des Rich-Hill-Modells konnte nicht abgerufen werden (die Seite verbietet automatische Abrufe, das wird respektiert). Die App nutzt deshalb eine **Näherung**: Sie geht durch geprüfte Werte der Chart 2026 (Pick 13 = 336, Pick 61 = 86, Pick 93 = 42, Pick 207 = 4, Pick 251 = 1) und nimmt für Pick 1 den Wert 1000 an (Annahme, nicht geprüft). Dazwischen wird interpoliert. Die echte Tabelle kannst du in den Einstellungen unter „Trade-Wertchart“ einfügen (Zeilen „Pick Wert“); sie ersetzt dann die Näherung.
+- **Annahmen:** Das Computer-Team nimmt an, wenn es mindestens so viel Wert bekommt wie es abgibt. Ein Pick 2028 zählt wie der mittlere Pick der Runde mit 20 % Abschlag.
+
+## Needs und Pick-Besitzer ändern
+
+In den Einstellungen änderst du die Needs eines Teams (3–5 Positionen, wichtigste zuerst) und den Besitzer einzelner Picks. Beides wird getrennt von den Daten gespeichert: Ein Daten-Update überschreibt deine Änderungen nie, sie gelten, bis du sie zurücksetzt. Auf der Startseite steht, wie viele eigene Änderungen aktiv sind.
 
 ## Logos einfügen oder austauschen
 
@@ -101,11 +137,12 @@ src/data/           Teams, Datenformate, Prüfregeln, Import, Laden der Daten
 scripts/data-update/ Daten-Job (höfliches Abrufen, Zeitsteuerung, Prüfen, Speichern)
 public/data/        Daten-Dateien (draft-order, big-board, college-stats)
 data-state/         Merkzettel des Daten-Jobs (ETag, letzter Lauf)
-src/draft/          Draft-Kern: Engine (KI, Ablauf), Needs, Autosave, Steuerung
+src/draft/          Draft-Kern: Engine (KI, Ablauf), Needs, Noten, Autosave, Steuerung
+src/export/         Picks-Übersicht: Datenmodell und PNG-Zeichnung
 src/storage/        Speicher (IndexedDB mit Ersatz), Backup, Einstellungen
 src/i18n/           Texte Deutsch/Englisch
 src/ui/             Oberfläche
 tests/unit/         Unit-Tests (Vitest)
-tests/e2e/          Browser-Tests (Playwright, Handy 360 px und Desktop)
+tests/e2e/          Browser-Tests (Playwright, Handy 360 px, S24 Ultra 412 px und Desktop)
 .github/workflows/  Tests und Veröffentlichung auf GitHub Pages
 ```

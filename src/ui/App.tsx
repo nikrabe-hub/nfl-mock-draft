@@ -5,10 +5,11 @@ import { applyUpdate, pwaState } from '../pwa';
 import { settingsStore, updateSettings, type Theme } from '../storage/settings';
 import { useStore } from '../store';
 import { DraftView } from './DraftView';
+import { History } from './History';
 import { Home } from './Home';
 import { Settings } from './Settings';
 
-type Tab = 'home' | 'draft' | 'settings';
+type Tab = 'home' | 'draft' | 'history' | 'settings';
 
 const NEXT_THEME: Record<Theme, Theme> = { system: 'light', light: 'dark', dark: 'system' };
 
@@ -43,6 +44,15 @@ export function App() {
   const draft = useStore(draftStore);
   const [tab, setTab] = useState<Tab>('home');
   const hasDraft = !!draft.session;
+
+  // Beim Wechsel zwischen Start, Draft und Einstellungen immer oben beginnen (nicht an der alten Scrollstelle).
+  useEffect(() => {
+    try {
+      window.scrollTo(0, 0);
+    } catch {
+      /* egal */
+    }
+  }, [tab]);
 
   // Nach dem Neuladen mitten im Draft landet man direkt wieder im Draft.
   const reopened = useRef(false);
@@ -95,6 +105,7 @@ export function App() {
       <main class="content">
         {tab === 'home' && <Home onOpenDraft={() => setTab('draft')} />}
         {tab === 'draft' && hasDraft && <DraftView onLeave={() => setTab('home')} />}
+        {tab === 'history' && <History />}
         {tab === 'settings' && <Settings />}
       </main>
 
@@ -107,6 +118,9 @@ export function App() {
             {t('nav.draft')}
           </button>
         )}
+        <button type="button" class={tab === 'history' ? 'tab active' : 'tab'} aria-current={tab === 'history' ? 'page' : undefined} data-testid="tab-history" onClick={() => setTab('history')}>
+          {t('nav.history')}
+        </button>
         <button type="button" class={tab === 'settings' ? 'tab active' : 'tab'} aria-current={tab === 'settings' ? 'page' : undefined} data-testid="tab-settings" onClick={() => setTab('settings')}>
           {t('nav.settings')}
         </button>

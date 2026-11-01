@@ -19,6 +19,11 @@ export default defineConfig({
       use: { browserName: 'chromium', viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true },
     },
     {
+      // Samsung Galaxy S24 Ultra: ca. 412 x 915 CSS-Pixel bei Pixeldichte 3,5
+      name: 's24-ultra',
+      use: { browserName: 'chromium', viewport: { width: 412, height: 915 }, deviceScaleFactor: 3.5, isMobile: true, hasTouch: true },
+    },
+    {
       name: 'desktop',
       use: { browserName: 'chromium', viewport: { width: 1280, height: 800 } },
     },

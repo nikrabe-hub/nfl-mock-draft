@@ -2,6 +2,7 @@ import { useMemo, useState } from 'preact/hooks';
 import { dataStore } from '../data/loader';
 import { TEAMS } from '../data/teams';
 import { startDraft, type StartError } from '../draft/controller';
+import { applyOrderOverride, overrideCounts, overridesStore } from '../draft/overrides';
 import { prefsStore, updatePrefs } from '../draft/prefs';
 import { useT } from '../i18n';
 import { useStore } from '../store';
@@ -12,14 +13,16 @@ export function Setup({ onStarted }: { onStarted: () => void }) {
   const t = useT();
   const data = useStore(dataStore);
   const prefs = useStore(prefsStore);
+  const overrides = useStore(overridesStore);
+  const ov = { counts: overrideCounts(overrides) };
   const [error, setError] = useState<StartError | null>(null);
   const [starting, setStarting] = useState(false);
 
   const firstPick = useMemo(() => {
     const m = new Map<string, number>();
-    for (const p of data.picks) if (!m.has(p.team) || p.pick < m.get(p.team)!) m.set(p.team, p.pick);
+    for (const p of applyOrderOverride(data.picks, overrides.order)) if (!m.has(p.team) || p.pick < m.get(p.team)!) m.set(p.team, p.pick);
     return m;
-  }, [data.picks]);
+  }, [data.picks, overrides.order]);
 
   const sorted = useMemo(
     () => [...TEAMS].sort((a, b) => (firstPick.get(a.abbr) ?? 9999) - (firstPick.get(b.abbr) ?? 9999) || a.city.localeCompare(b.city) || a.name.localeCompare(b.name)),
@@ -111,6 +114,12 @@ export function Setup({ onStarted }: { onStarted: () => void }) {
         {short && (
           <p class="notice" role="note" data-testid="setup-pool-short">
             {t('setup.pool.short', { players, picks, missing: picks - players })}
+          </p>
+        )}
+
+        {(ov.counts.needs > 0 || ov.counts.picks > 0) && (
+          <p class="notice" role="note" data-testid="setup-overrides">
+            {t('setup.overrides', { needs: ov.counts.needs, picks: ov.counts.picks })}
           </p>
         )}
 

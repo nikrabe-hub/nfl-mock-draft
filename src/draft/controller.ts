@@ -14,8 +14,12 @@ import {
   type DraftSession,
   type PickError,
 } from './engine';
+import { archiveSession } from './history';
+import { acceptOffer, applyTrade, considerOffer, declineOffer, type TradeError } from './trades';
+import type { Asset } from './tradeTypes';
 import { resolveNeeds } from './needs';
-import { prefsStore } from './prefs';
+import { applyOrderOverride, sanitizeOrderOverride } from './overrides';
+import { prefsStore, updatePrefs } from './prefs';
 import { loadSession, saveSession } from './persist';
 
 export interface DraftUi {
@@ -44,6 +48,7 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 function commit(session: DraftSession | null, extra: Partial<DraftUi> = {}): void {
   draftStore.set({ session, lastIndex: session ? session.results.length - 1 : -1, ...extra });
   void saveSession(session);
+  if (session && session.status === 'finished') void archiveSession(session);
 }
 
 /** Wartet, bis keine KI-Picks mehr laufen (für Tests). */
@@ -61,7 +66,16 @@ function drive(): void {
     try {
       for (;;) {
         const s = draftStore.get().session;
-        if (myEpoch !== epoch || !s || s.status !== 'running' || isUserTurn(s)) return;
+        if (myEpoch !== epoch || !s || s.status !== 'running') return;
+        const mine = isUserTurn(s);
+        if (mine && !prefsStore.get().autoPick) {
+          // Am eigenen Pick: einmal prüfen, ob ein Computer-Team ein Trade-Angebot macht.
+          if (prefsStore.get().tradeOffers) {
+            const withOffer = considerOffer(s);
+            if (withOffer !== s) commit(withOffer);
+          }
+          return;
+        }
         const ms = DELAY_MS[prefsStore.get().tempo];
         if (ms > 0) {
           await sleep(ms);
@@ -71,7 +85,8 @@ function drive(): void {
         }
         const now = draftStore.get().session;
         if (myEpoch !== epoch || now !== s) continue; // zwischenzeitlich verändert: neu bewerten
-        commit(applyAiPick(s));
+        if (mine && !prefsStore.get().autoPick) continue; // Auto-Pick wurde währenddessen ausgeschaltet
+        commit(applyAiPick(s, mine ? { auto: true } : {}));
       }
     } catch {
       /* Ein Fehler in der KI darf die App nie lahmlegen: Der Draft bleibt am letzten gespeicherten Stand stehen. */
@@ -88,14 +103,18 @@ export async function startDraft(opts: { seed?: number; now?: Date } = {}): Prom
   const prefs = prefsStore.get();
   if (data.picks.length === 0 || data.players.length === 0) return { ok: false, error: 'no_data' };
   let override: unknown;
+  let orderOverride: unknown;
   try {
-    override = await (await getStorage()).get(KEYS.needsOverride);
+    const storage = await getStorage();
+    override = await storage.get(KEYS.needsOverride);
+    orderOverride = await storage.get(KEYS.orderOverride);
   } catch {
     override = undefined;
+    orderOverride = undefined;
   }
   const seed = opts.seed ?? randomSeed();
   const created = createSession({
-    order: data.picks,
+    order: applyOrderOverride(data.picks, sanitizeOrderOverride(orderOverride)),
     players: data.players,
     needs: resolveNeeds(override),
     year: data.draftYear,
@@ -104,6 +123,8 @@ export async function startDraft(opts: { seed?: number; now?: Date } = {}): Prom
   });
   if (!created.ok) return { ok: false, error: created.error };
   epoch++;
+  // Auto-Pick gilt nur für den laufenden Draft: ein neuer Draft beginnt immer mit eigenem Zug.
+  if (prefs.autoPick) void updatePrefs({ autoPick: false });
   commit(created.session, { cpuRunning: false, invalidSaved: false });
   drive();
   return { ok: true };
@@ -115,6 +136,7 @@ export async function resumeDraft(): Promise<void> {
   if (r.kind === 'ok') {
     epoch++;
     draftStore.set({ loaded: true, session: r.session, invalidSaved: false, cpuRunning: false, lastIndex: r.session.results.length - 1 });
+    if (r.session.status === 'finished') void archiveSession(r.session);
     drive();
   } else {
     draftStore.set({ loaded: true, session: null, invalidSaved: r.kind === 'invalid', cpuRunning: false, lastIndex: -1 });
@@ -143,16 +165,45 @@ export function autoPickNow(): boolean {
   return true;
 }
 
+/** Führt einen Trade mit einem Computer-Team aus (Wertprüfung inklusive). */
+export function tradeNow(userTeam: string, cpuTeam: string, userGives: readonly Asset[], cpuGives: readonly Asset[]): { ok: true } | { ok: false; error: TradeError } {
+  const s = draftStore.get().session;
+  if (!s) return { ok: false, error: 'not_running' };
+  const r = applyTrade(s, userTeam, cpuTeam, userGives, cpuGives);
+  if (!r.ok) return r;
+  commit(r.session);
+  drive();
+  return { ok: true };
+}
+
+/** Nimmt das Angebot eines Computer-Teams an. */
+export function acceptTradeOffer(): boolean {
+  const s = draftStore.get().session;
+  if (!s) return false;
+  const r = acceptOffer(s);
+  if (!r.ok) return false;
+  commit(r.session);
+  drive();
+  return true;
+}
+
+export function declineTradeOffer(): void {
+  const s = draftStore.get().session;
+  if (!s) return;
+  const next = declineOffer(s);
+  if (next !== s) commit(next);
+}
+
 /** Verwirft den Draft (auch den gespeicherten). */
 export function discardDraft(): void {
   epoch++;
   commit(null, { cpuRunning: false, invalidSaved: false });
 }
 
-/** Tempo wurde geändert: Läuft die KI gerade, übernimmt sie das neue Tempo beim nächsten Pick. */
+/** Tempo oder Auto-Pick wurde geändert: Läuft die KI gerade, übernimmt sie das beim nächsten Pick. */
 export function nudge(): void {
   const s = draftStore.get().session;
-  if (s && s.status === 'running' && !isUserTurn(s)) drive();
+  if (s && s.status === 'running' && (!isUserTurn(s) || prefsStore.get().autoPick)) drive();
 }
 
 export function nextSlotInfo(): ReturnType<typeof currentSlot> {

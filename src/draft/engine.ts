@@ -12,6 +12,7 @@ import { getTeam } from '../data/teams';
 import type { DraftPick, Player } from '../data/types';
 import { gauss } from './rng';
 import type { NeedsMap } from './needs';
+import { sanitizeFuture, sanitizeOffer, sanitizeTrades, type FuturePick, type TradeEntry, type TradeOffer } from './tradeTypes';
 
 export type Randomness = 'predictable' | 'realistic' | 'chaos';
 export type Tempo = 'slow' | 'normal' | 'instant';
@@ -70,6 +71,14 @@ export interface DraftSession {
   results: PickResult[];
   status: DraftStatus;
   endReason?: EndReason;
+  /** Picks des Folgejahres (nur als Tauschwert). Fehlt das Feld, besitzt jedes Team seine eigenen. */
+  future?: FuturePick[];
+  /** Alle ausgeführten Trades in Reihenfolge. */
+  trades?: TradeEntry[];
+  /** Aktuelles Trade-Angebot eines Computer-Teams (gilt nur für den aktuellen Pick). */
+  offer?: TradeOffer;
+  /** Für welchen Pick (Anzahl gemachter Picks) wurde schon über ein Angebot entschieden/gewürfelt? */
+  offerChecked?: number;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -197,6 +206,25 @@ export function teamDrafted(s: DraftSession, team: string): Player[] {
   return out;
 }
 
+/** Einmal pro Darstellung berechnet: welche Spieler hat welches Team bisher gezogen (schneller als je Zeile zu suchen). */
+export function draftedByTeam(s: DraftSession): Map<string, Player[]> {
+  const byId = new Map(s.pool.map((p) => [p.id, p]));
+  const out = new Map<string, Player[]>();
+  s.results.forEach((r, i) => {
+    const team = s.order[i]?.team;
+    const p = byId.get(r.playerId);
+    if (!team || !p) return;
+    const list = out.get(team);
+    if (list) list.push(p);
+    else out.set(team, [p]);
+  });
+  return out;
+}
+
+export function needsFrom(needs: readonly string[], drafted: readonly Player[]): NeedStatus[] {
+  return needs.map((pos) => ({ pos, filled: drafted.filter((p) => p.pos === pos || p.altPos?.includes(pos)).length }));
+}
+
 export interface NeedStatus {
   pos: string;
   /** Wie viele Spieler dieser Position das Team bereits gezogen hat. */
@@ -299,7 +327,10 @@ export function applyPick(s: DraftSession, playerId: string, opts: { auto?: bool
   if (!s.pool.some((p) => p.id === playerId)) return { ok: false, error: 'unknown_player' };
   if (s.results.some((r) => r.playerId === playerId)) return { ok: false, error: 'already_drafted' };
   const result: PickResult = opts.auto ? { pick: slot.pick, playerId, auto: true } : { pick: slot.pick, playerId };
-  const next: DraftSession = { ...s, results: [...s.results, result], updatedAt: (opts.now ?? new Date()).toISOString() };
+  // Ein offenes Trade-Angebot gilt nur für diesen Pick und endet mit ihm.
+  const { offer: _offer, ...base } = s;
+  void _offer;
+  const next: DraftSession = { ...base, results: [...s.results, result], updatedAt: (opts.now ?? new Date()).toISOString() };
   return { ok: true, session: settle(next) };
 }
 
@@ -385,6 +416,13 @@ export function sanitizeSession(raw: unknown): DraftSession | null {
       results,
       status: 'running',
     };
+    const future = sanitizeFuture(raw.future);
+    if (future) base.future = future;
+    const trades = sanitizeTrades(raw.trades);
+    if (trades) base.trades = trades;
+    const offer = sanitizeOffer(raw.offer);
+    if (offer && offer.at === results.length) base.offer = offer;
+    if (typeof raw.offerChecked === 'number' && Number.isInteger(raw.offerChecked) && raw.offerChecked >= 0) base.offerChecked = raw.offerChecked;
     return settle(base);
   } catch {
     return null;
