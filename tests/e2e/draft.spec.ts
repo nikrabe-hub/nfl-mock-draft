@@ -12,12 +12,16 @@ async function choose(page: Page, teams: string[], rounds: number, tempo: 'slow'
   await page.getByTestId(`opt-tempo-${tempo}`).click();
 }
 
+// Erst warten, bis die Draft-Ansicht wirklich gezeichnet ist: Auf langsamen Rechnern (CI) wäre der
+// Umschalter sonst noch nicht sichtbar, und der Klick würde stillschweigend übersprungen.
 async function showBoard(page: Page) {
+  await page.getByTestId('draft-progress').waitFor();
   const sw = page.getByTestId('view-board');
   if (await sw.isVisible()) await sw.click();
 }
 
 async function showPick(page: Page) {
+  await page.getByTestId('draft-progress').waitFor();
   const sw = page.getByTestId('view-pick');
   if (await sw.isVisible()) await sw.click();
 }
@@ -487,8 +491,14 @@ test.describe('Trades', () => {
     expect(found, 'in 30 Drafts kam nie ein Angebot').toBe(true);
     const card = page.getByTestId('trade-offer');
     await expect(card).toContainText('bietet');
+    const firstOffer = await card.innerText();
     await page.getByTestId('offer-accept').click();
-    await expect(page.getByTestId('trade-offer')).toHaveCount(0);
+    // Das angenommene Angebot ist weg. Am neu erhaltenen Pick darf ein NEUES Angebot erscheinen,
+    // aber nie dasselbe wieder.
+    await expect(async () => {
+      const offers = page.getByTestId('trade-offer');
+      if ((await offers.count()) > 0) expect(await offers.innerText()).not.toBe(firstOffer);
+    }).toPass();
     // Pick 1 ist weg: Das Computer-Team zieht, ich warte auf meinen nächsten Pick
     await expect(page.getByTestId('waiting-panel').or(page.getByTestId('clock-panel')).first()).toBeVisible();
     await showBoard(page);
